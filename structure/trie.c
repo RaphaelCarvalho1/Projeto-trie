@@ -34,15 +34,21 @@ Trie* create(){
 }
 
 Trie *insert(Trie *trie, int value, char *key){
+    if(key[0] == '\0') return trie;
+
     if(!trie) trie = create();
 
-    if(key[0]=='\0'){
-        trie->value = value;
-        trie->is_terminal = 1;
-    }else{
-        int iKey = (int) key[0];
+    int iKey = (int) key[0];
+
+    if(key[1]=='\0'){
+        if(!trie->children[iKey])
+            trie->children[iKey] = create(); 
+        
+        trie->children[iKey]->value = value;
+        trie->children[iKey]->is_terminal = 1;
+    }else
         trie->children[iKey] = insert(trie->children[iKey], value, &(key[1]));
-    }
+    
 
     return trie;
 }
@@ -89,32 +95,29 @@ void print_trie(Trie* trie){
 Trie *t_remove(Trie *trie, char *key){
     if(!trie) return trie;
 
+    Trie *aux = NULL;
+
     if(key[0]=='\0'){
         trie->is_terminal = 0;
     }
+    else {
+        int iKey = (int) key[0];
+        aux = t_remove(trie->children[iKey], &(key[1]));
+        trie->children[iKey] = aux;
+    }
 
-    int iKey = (int) key[0];
-
-    trie->children[iKey] = t_remove(trie->children[iKey], &(key[1]));
-
-    int has_child = 0;
+    if(aux || trie->is_terminal) return trie;
 
     for(int i = 0; i<A_LENGTH; i++){
         if(trie->children[i]){
-            has_child = 1;
-            break;
+            return trie;
         }
     }
 
-    if(!has_child){
-        Trie *trash = trie;
-        free(trash->children);
-        free(trash);
+    free(trie->children);
+    free(trie);
 
-        trie = NULL;
-    }
-
-    return trie;
+    return NULL;
 }
 
 int main(){
@@ -124,14 +127,15 @@ int main(){
     trie = insert(trie, 3, "ali");
     trie = insert(trie, 5, "ei");
 
-    //printf("%d %d %d\n", search(trie, "ali")->value, search(trie, "ala")->value, search(trie, "ei")->value);
+    printf("%d %d %d\n", search(trie, "ali")->value, search(trie, "ala")->value, search(trie, "ei")->value);
 
     trie = t_remove(trie, "ala");
 
     if(!search(trie, "ala"))
-        printf("nao achou");
+        printf("nao achou\n");
 
-    printf("%d %d\n", search(trie, "ei")->value);
+    printf("%d %d\n", search(trie, "ei")->value, search(trie, "ali")->value);
+    printf("%d %d");
 
     return 0;
 }
