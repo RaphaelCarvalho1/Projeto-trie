@@ -1,6 +1,6 @@
 from ctypes import *
 
-_triem = cdll.LoadLibrary("./trie.so")
+_triem = cdll.LoadLibrary("./structure/trie.dll")
 
 _triem.trie_insert.argtypes = [c_char_p, c_int]
 

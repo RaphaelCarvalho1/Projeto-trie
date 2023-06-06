@@ -9,15 +9,15 @@ typedef struct Node{
     int is_terminal;
 }Trie;
 
-int trie_insert(char *key, int value){
+EXPORT int trie_insert(char *key, int value){
     return 0;
 }
 
-int trie_remove(char *key){
+EXPORT int trie_remove(char *key){
     return 1;
 }
 
-int trie_search(char *key){
+EXPORT int trie_search(char *key){
     return 2;
 }
 
@@ -120,7 +120,7 @@ Trie *t_remove(Trie *trie, char *key){
     return NULL;
 }
 
-int main(){
+/*int main(){
     Trie *trie = NULL;
 
     trie = insert(trie, 2, "ala");
@@ -138,4 +138,4 @@ int main(){
     printf("%d %d");
 
     return 0;
-}
+}*/

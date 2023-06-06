@@ -2,8 +2,19 @@
 #include "stdlib.h"
 #include "string.h"
 
-int trie_insert(char *key, int value);
+#ifdef BUILD_DLL
+// the dll exports
+#define EXPORT __declspec(dllexport)
+#else
+// the exe imports
+#define EXPORT __declspec(dllimport)
+#endif
 
-int trie_remove(char *key);
+// function to be imported/exported
 
-int trie_search(char *key);
+EXPORT int trie_insert(char *key, int value); 
+
+EXPORT int trie_remove(char *key);; 
+
+EXPORT int trie_search(char *key); 
+
