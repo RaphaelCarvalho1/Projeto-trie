@@ -1,3 +1,7 @@
 from trie_py import Trie
 
-print(Trie.remove("a"))
+trie = Trie();
+
+trie.insert("a", 10);
+
+print(trie.search("a"));

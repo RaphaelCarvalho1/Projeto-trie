@@ -1,0 +1,17 @@
+echo $./trie.so                                para olhar para a pasta da lib
+export LD_LIBRARY_PATH=./:$./trie.so           para importar a lib para o diretório atual
+
+gcc -c -Wall -Werror -fpic trie.c
+gcc -shared -o trie.so trie.o                  usar esses dois comandos para compilar o .so
+
+gcc teste.c trie.so -o teste                   para importar no arquivo na hora de compilar (só para testes c)
+
+
+para rodar o binding:
+
+permaneça na raiz do projeto
+
+echo $./structure/trie.so
+export LD_LIBRARY_PATH=./:$./structure/trie.so
+
+python3 binding/teste.py

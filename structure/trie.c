@@ -9,18 +9,7 @@ typedef struct Node{
     int is_terminal;
 }Trie;
 
-EXPORT int trie_insert(char *key, int value){
-    return 0;
-}
-
-EXPORT int trie_remove(char *key){
-    return 1;
-}
-
-EXPORT int trie_search(char *key){
-    return 2;
-}
-
+Trie *root = NULL;
 
 Trie* create(){
     Trie *new = (Trie *) malloc(sizeof(Trie));
@@ -120,22 +109,26 @@ Trie *t_remove(Trie *trie, char *key){
     return NULL;
 }
 
-/*int main(){
-    Trie *trie = NULL;
+//###########################################################
+//Exported functions:
 
-    trie = insert(trie, 2, "ala");
-    trie = insert(trie, 3, "ali");
-    trie = insert(trie, 5, "ei");
+void trie_insert(char *key, int value){
+    root = insert(root, value, key);
+}
 
-    printf("%d %d %d\n", search(trie, "ali")->value, search(trie, "ala")->value, search(trie, "ei")->value);
+void trie_remove(char *key){
+    root = t_remove(root, key);
+}
 
-    trie = t_remove(trie, "ala");
+int trie_search(char *key){
+    Trie *goal = search(root, key);
 
-    if(!search(trie, "ala"))
-        printf("nao achou\n");
+    //retorno provisório
+    if(!goal) return -1;
 
-    printf("%d %d\n", search(trie, "ei")->value, search(trie, "ali")->value);
-    printf("%d %d");
+    return goal->value;
+}
 
+int main(){
     return 0;
-}*/
+}

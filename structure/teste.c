@@ -1,9 +1,14 @@
-   #include "trie.h"
+#include "trie.h"
 
-   int main ()
-   {
-      
-        printf("%d", trie_remove("chave"));
+int main(){
 
-      return 0;
-   }
+   trie_insert("aa", 10);
+   trie_insert("ab", 11);
+
+   trie_remove("aa");
+
+   printf("%d %d\n", trie_search("aa"), trie_search("ab"));
+   printf("ah\n");
+
+   return 0;
+}
