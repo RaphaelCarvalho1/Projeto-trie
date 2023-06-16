@@ -2,13 +2,16 @@
 
 int main(){
 
-   trie_insert("aa", 10);
-   trie_insert("ab", 11);
+   trie_insert("a", 13);
+   trie_insert("abracadabra", 12);
 
-   trie_remove("aa");
+   //trie_insert("abacaxi", 3);
 
-   printf("%d %d\n", trie_search("aa"), trie_search("ab"));
-   printf("ah\n");
+   //trie_insert("a tonito", 5);
+
+   char *str = JSONStringSubTree("a");
+
+   printf("%s \n", str);
 
    return 0;
 }
