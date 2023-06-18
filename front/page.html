@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Form</title>
+</head>
+<body>
+    <div class="bg-zinc-900 flex items-center justify-center h-screen" id="main">
+        
+        <div class="bg-neutral-50 border rounded-lg py-8 container max-w-sm p-4 text-center">
+        
+            <h1 class="text-3xl font-bold mb-4">FORMULÁRIO DE TRANSAÇÃO</h1>
+            <form id="formPagamento" onsubmit="sub(event)">
+
+                <div class="flex flex-col justify-center mb-4">
+                    <label for="origin" class="mr-2">Conta de Origem:</label>
+                    <input type="text" class="p-2 border rounded max-w-sm self-center text-center" name="origin" id="origin">
+
+                    <label for="destiny" class="mr-2">Conta de Destino:</label>
+                    <input type="text" class="p-2 border rounded max-w-sm self-center text-center" name="destiny" id="destiny">
+                </div>
+
+                <div class="flex flex-col justify-center mb-4">
+                    <label for="amount" class="mr-2">Valor:</label>
+                    <input type="number" class="p-2 border rounded self-center text-center" name="amount" min="0.00" placeholder="0.00" step="0.01" id="amount">
+                </div>
+
+                <div>
+                    <button class="bg-rose-800 text-white py-2 px-6 rounded" type="submit">Enviar Transação</button>
+                    <button class="bg-neutral-600 text-white py-2 px-6 rounded" type="submit" onclick="reportCreate()">Gerar Relatório</button>
+                </div>
+
+            </form>
+
+            <div id="report"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const transactions = []
+        const socket = new WebSocket("ws://localhost:8765");
+
+        socket.addEventListener("open", (event)=>{
+            console.log("Conexão bem sucedida.");
+        });
+
+        function sub(event) {
+            event.preventDefault();
+
+            const form = document.getElementById("formPagamento");
+
+            let origin = form.elements["origin"].value;
+            let destiny = form.elements["destiny"].value;
+            let amount = form.elements["amount"].value;
+
+            const data = {
+                "type": "t",
+                "origin": origin,
+                "destiny": destiny,
+                "amount": amount
+            }
+
+            socket.send(JSON.stringify(data));
+            transactions.push(data);
+
+            const panel = document.getElementById("report");
+            panel.innerHTML += "<p id='log'>Transação realizada com sucesso!</p>";
+
+            setTimeout(() => {
+                document.getElementById('log').remove();
+            }, 3000);
+        }
+
+        function reportCreate(event) {
+            const form = document.getElementById("formPagamento");
+
+            let origin = form.elements["origin"].value;
+            let destiny = form.elements["destiny"].value;
+            let amount = form.elements["amount"].value;
+
+            const data = {
+                "type": "r",
+                "origin": origin,
+                "destiny": destiny,
+                "amount": amount
+            }
+
+            const report = document.createElement("div");
+
+            report.id = "popup";
+            report.classList = "absolute overflow-y-scroll h-80 text-center flex flex-col space-y-4 justify-between px-20 py-2 border bg-white rounded text-black drop-shadow-2xl";
+
+            report.innerHTML = "<h2 class='text-xl font-bold '>HISTÓRICO DE TRANSAÇÕES</h2>";
+        
+            if (transactions.length === 0){
+                report.innerHTML += "<p>Nenhuma transação realizada.</p>";
+            }else {
+                report.innerHTML += "<ul>";
+
+                transactions.map((trans) =>{
+                    const item = `<li> Transação feita por: ${trans.origin}, para: ${trans.destiny}, no valor de: ${trans.amount}`
+                
+                    report.innerHTML += item;
+                }); 
+
+                report.innerHTML += "</ul>";
+            }
+
+            report.innerHTML += "<button class='bg-rose-800 text-white py-2 px-2 rounded' onClick='closePop()'>Voltar</button>";
+            document.getElementById("main").appendChild(report);
+        }
+
+        function closePop(){
+            document.getElementById('popup').remove();
+        }
+
+    </script>
+</body>
+</html>
