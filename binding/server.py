@@ -7,7 +7,7 @@ dataBase = TrieBD()
 
 async def handle(websocket):
     async for message in websocket:
-        await websocket.send("Server to client")
+        #await websocket.send("Server to client")
 
         msg = json.loads(message);
 

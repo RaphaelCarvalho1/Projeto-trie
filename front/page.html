@@ -40,7 +40,7 @@
     </div>
 
     <script>
-        const transactions = []
+        //const transactions = []
         const socket = new WebSocket("ws://localhost:8765");
 
         socket.addEventListener("open", (event)=>{
@@ -60,11 +60,11 @@
                 "type": "t",
                 "origin": origin,
                 "destiny": destiny,
-                "amount": amount
+                "amount": Number.parseInt(amount)
             }
 
             socket.send(JSON.stringify(data));
-            transactions.push(data);
+            //transactions.push(data);
 
             const panel = document.getElementById("report");
             panel.innerHTML += "<p id='log'>Transação realizada com sucesso!</p>";
@@ -88,6 +88,8 @@
                 "amount": amount
             }
 
+            socket.send(JSON.stringify(data))
+
             const report = document.createElement("div");
 
             report.id = "popup";
@@ -95,7 +97,7 @@
 
             report.innerHTML = "<h2 class='text-xl font-bold '>HISTÓRICO DE TRANSAÇÕES</h2>";
         
-            if (transactions.length === 0){
+            /*if (transactions.length === 0){
                 report.innerHTML += "<p>Nenhuma transação realizada.</p>";
             }else {
                 report.innerHTML += "<ul>";
@@ -107,7 +109,7 @@
                 }); 
 
                 report.innerHTML += "</ul>";
-            }
+            }*/
 
             report.innerHTML += "<button class='bg-rose-800 text-white py-2 px-2 rounded' onClick='closePop()'>Voltar</button>";
             document.getElementById("main").appendChild(report);
@@ -116,6 +118,10 @@
         function closePop(){
             document.getElementById('popup').remove();
         }
+
+        socket.addEventListener("message", ({data})=>{
+            console.log(data)
+        })
 
     </script>
 </body>

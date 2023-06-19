@@ -6,8 +6,11 @@ class TrieBD:
     def __init__(self):
         self.trie = Trie()
 
-        self.trie.insert("c rute", 200)
-        self.trie.insert("c raphael", 200)
+        self.trie.insert("c Rute", 200)
+        self.trie.insert("c Raphael", 200)
+        self.trie.insert("c Sara", 200)
+        self.trie.insert("c Christiano", 200)
+        self.trie.insert("c Bruno", 200)
 
     def printAccount(self, nome):
         print(self.trie.search("c "+nome))
@@ -20,6 +23,8 @@ class TrieBD:
 
         if(balanceDest["valid"] == 0 or balanceOrg["valid"] == 0):
             return
+        
+        print("ah")
 
         balanceOrg["value"] -= amount
         balanceDest["value"] += amount
