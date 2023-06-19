@@ -16,12 +16,12 @@ async def handle(websocket):
         dataBase.printAccount(msg["origin"])
 
         if(msg["type"] == "t"):
-            dataBase.transact(msg["origin"], msg["destiny"], msg["amount"])
+            response = dataBase.transact(msg["origin"], msg["destiny"], msg["amount"])
 
         if(msg["type"] == "r"):
-            response = dataBase.getReport(msg["origin"], msg["destiny"])
+            response = dataBase.getReport()#msg["origin"], msg["destiny"])
 
-            await websocket.send(response)
+        await websocket.send(response)
 
 async def main():
     async with serve(handle, "localhost", 8765):

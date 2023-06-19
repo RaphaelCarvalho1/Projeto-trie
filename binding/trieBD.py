@@ -12,6 +12,8 @@ class TrieBD:
         self.trie.insert("c Christiano", 200)
         self.trie.insert("c Bruno", 200)
 
+        self.trie.insert("t ", 1);
+
     def printAccount(self, nome):
         print(self.trie.search("c "+nome))
 
@@ -22,7 +24,7 @@ class TrieBD:
         balanceDest = json.loads(self.trie.search("c "+destinyAccount))
 
         if(balanceDest["valid"] == 0 or balanceOrg["valid"] == 0):
-            return
+            return "Alguma das contas não é válida."
         
         print("ah")
 
@@ -43,23 +45,51 @@ class TrieBD:
 
         self.trie.insert("t "+originAccount+"-"+destinyAccount, transactionCount)
 
-    def getReport(self, origin, destiny):
-        subtree = self.trie.JSONStringSubTree("t "+origin+"-"+destiny)
+        return "transação realizada com sucesso."
 
-        nodes = json.loads(subtree)["nodes"]
+    def getReport(self):
+        names = ["Raphael", "Rute", "Bruno", "Sara", "Christiano"]
 
         out = "{\"transactions\":["
 
-        for node in nodes:
-            if(node["value"] == None): 
-                continue
+        for origin in names:
+            for destiny in names:
+                if(origin==destiny):
+                    continue
 
-            index = node["key"].replace("t "+origin+"-"+destiny+" ", "")
 
-            value = node["value"]
+                subtree = self.trie.JSONStringSubTree("t "+origin+"-"+destiny)
 
-            out += "{\"transaction-number\": "+index+", \"value\": "+str(value)+"},"
+                print(origin, destiny)
+
+                nodes = json.loads(subtree)["nodes"]
+
+                print("nodes: ",subtree)
+
+                for node in nodes:
+                    if(node["value"] == None): 
+                        continue
+
+                    index = numericEnd(node["key"])
+                    value = node["value"]
+
+                    out += "{\"transaction-number\": "+index+", \"value\": "+str(value)+",\"from\":\""+origin+"\",\"to\":\""+destiny+"\"},"
+                    print(out)
+
 
         out = out[0:len(out)-1]+"]}"
 
         return out
+
+
+
+def numericEnd(string):
+    out = ""
+
+    for i in range(len(string)-1, -1, -1):
+        if(not string[i].isnumeric()):
+            break
+
+        out= string[i] + out
+
+    return out
