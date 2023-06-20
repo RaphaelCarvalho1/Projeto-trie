@@ -45,7 +45,7 @@ class TrieBD:
 
         self.trie.insert("t "+originAccount+"-"+destinyAccount, transactionCount)
 
-        return "transação realizada com sucesso."
+        return "Transação realizada com sucesso!"
 
     def getReport(self):
         names = ["Raphael", "Rute", "Bruno", "Sara", "Christiano"]
@@ -57,14 +57,8 @@ class TrieBD:
                 if(origin==destiny):
                     continue
 
-
                 subtree = self.trie.JSONStringSubTree("t "+origin+"-"+destiny)
-
-                print(origin, destiny)
-
                 nodes = json.loads(subtree)["nodes"]
-
-                print("nodes: ",subtree)
 
                 for node in nodes:
                     if(node["value"] == None): 
@@ -74,14 +68,11 @@ class TrieBD:
                     value = node["value"]
 
                     out += "{\"transaction-number\": "+index+", \"value\": "+str(value)+",\"from\":\""+origin+"\",\"to\":\""+destiny+"\"},"
-                    print(out)
 
 
         out = out[0:len(out)-1]+"]}"
 
         return out
-
-
 
 def numericEnd(string):
     out = ""
