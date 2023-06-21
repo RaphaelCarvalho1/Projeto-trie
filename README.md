@@ -101,7 +101,9 @@ Classe que encapsula todos os métodos importados de trie.h
     utiliza websocket para se comunicar com o client, e uma instância de TrieBD para realizar
     transações e retornar o histórico.
 
+### Complexidade
 
+Análises da complexidade se encontram na pasta
 
-
+root/analises
     
