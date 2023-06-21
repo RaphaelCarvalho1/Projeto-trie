@@ -40,12 +40,33 @@
     </div>
 
     <script>
-        //const transactions = []
         const socket = new WebSocket("ws://localhost:8765");
 
         socket.addEventListener("open", (event)=>{
             console.log("Conexão bem sucedida.");
         });
+        
+        socket.addEventListener("message", ({data})=>{
+            
+            if(data === "Transação realizada com sucesso!"){
+                const panel = document.getElementById("report");
+                panel.innerHTML += "<p id='log'>Transação realizada com sucesso!</p>";
+
+                setTimeout(() => {
+                    document.getElementById('log').remove();
+                }, 3000);//.
+                
+            }else if(data === "Alguma das contas não é válida."){
+                const panel = document.getElementById("report");
+                panel.innerHTML += "<p id='log'>ERRO! Alguma das contas não é válida.</p>";
+
+                setTimeout(() => {
+                    document.getElementById('log').remove();
+                }, 3000);                    //. 
+            }else{
+                const datajson = JSON.parse(data)
+                openPop(datajson["transactions"])}
+        })
 
         function sub(event) {
             event.preventDefault();
@@ -64,17 +85,9 @@
             }
 
             socket.send(JSON.stringify(data));
-            //transactions.push(data);
-
-            const panel = document.getElementById("report");
-            panel.innerHTML += "<p id='log'>Transação realizada com sucesso!</p>";
-
-            setTimeout(() => {
-                document.getElementById('log').remove();
-            }, 3000);
         }
 
-        function reportCreate(event) {
+        function reportCreate(){
             const form = document.getElementById("formPagamento");
 
             let origin = form.elements["origin"].value;
@@ -88,28 +101,35 @@
                 "amount": amount
             }
 
-            socket.send(JSON.stringify(data))
+            socket.send(JSON.stringify(data));
+        }
 
+        function openPop(transactions) {
             const report = document.createElement("div");
 
             report.id = "popup";
             report.classList = "absolute overflow-y-scroll h-80 text-center flex flex-col space-y-4 justify-between px-20 py-2 border bg-white rounded text-black drop-shadow-2xl";
 
             report.innerHTML = "<h2 class='text-xl font-bold '>HISTÓRICO DE TRANSAÇÕES</h2>";
-        
-            /*if (transactions.length === 0){
+            console.log(transactions)
+            if (transactions.length==0){
                 report.innerHTML += "<p>Nenhuma transação realizada.</p>";
-            }else {
+            }
+            else {
                 report.innerHTML += "<ul>";
-
-                transactions.map((trans) =>{
-                    const item = `<li> Transação feita por: ${trans.origin}, para: ${trans.destiny}, no valor de: ${trans.amount}`
                 
+                for(let i=0;i<transactions.length;i++) {
+                    let trans = transactions[i];
+                    let from = trans["from"];
+                    let to = trans["to"];
+                    let value = trans["value"];
+
+                    const item = `<li> Transação feita por: ${from}, para: ${to}, no valor de: ${value}`
                     report.innerHTML += item;
-                }); 
+                }; 
 
                 report.innerHTML += "</ul>";
-            }*/
+                }
 
             report.innerHTML += "<button class='bg-rose-800 text-white py-2 px-2 rounded' onClick='closePop()'>Voltar</button>";
             document.getElementById("main").appendChild(report);
