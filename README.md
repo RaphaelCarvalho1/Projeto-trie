@@ -106,6 +106,3 @@ Classe que encapsula todos os métodos importados de trie.h
 Análises da complexidade se encontram na pasta:
 
 _./analises_
-
-
-    
