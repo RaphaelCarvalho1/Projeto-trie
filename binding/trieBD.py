@@ -12,12 +12,10 @@ class TrieBD:
         self.trie.insert("c Christiano", 200)
         self.trie.insert("c Bruno", 200)
 
-        self.trie.insert("t ", 1);
+    def printAccount(self, name):
+        print(self.trie.search("c "+name))
 
-    def printAccount(self, nome):
-        print(self.trie.search("c "+nome))
-
-    def transact(self, originAccount, destinyAccount, amount):
+    def transact(self, originAccount, destinyAccount, ammount):
 
         balanceOrg = json.loads(self.trie.search("c "+originAccount))
 
@@ -28,8 +26,8 @@ class TrieBD:
         
         print("ah")
 
-        balanceOrg["value"] -= amount
-        balanceDest["value"] += amount
+        balanceOrg["value"] -= ammount
+        balanceDest["value"] += ammount
 
         self.trie.insert("c "+originAccount, balanceOrg["value"])
         self.trie.insert("c "+destinyAccount, balanceDest["value"])
@@ -41,7 +39,7 @@ class TrieBD:
         if(transactionsHeader["valid"] == 1): 
             transactionCount += transactionsHeader["value"]
 
-        self.trie.insert("t "+originAccount+"-"+destinyAccount+" "+str(transactionCount), amount)
+        self.trie.insert("t "+originAccount+"-"+destinyAccount+" "+str(transactionCount), ammount)
 
         self.trie.insert("t "+originAccount+"-"+destinyAccount, transactionCount)
 

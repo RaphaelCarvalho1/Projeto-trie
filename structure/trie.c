@@ -336,16 +336,5 @@ char *JSONStringSubTree(char *key){
 
 int main(){
 
-    trie_insert("abacaxi", 0);
-
-    printf("%s\n",trie_search("abacaxi"));
-
-    char out[10];
-    out[0] = '\0';
-
-    itoStr(0, out);
-
-    printf("%s\n", out);
-
     return 0;
 }
